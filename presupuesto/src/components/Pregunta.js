@@ -1,6 +1,9 @@
 import React, { Fragment, useState } from 'react';
+import Error from './Error';
+import PropTypes from 'prop-types';
 
-const Pregunta = () =>{
+
+const Pregunta = ({guardarPresupuesto, guardarRestante, actualizarPregunta}) =>{
 
     // definir el state
     const [cantidad, guardarCantidad] = useState(0);
@@ -9,7 +12,7 @@ const Pregunta = () =>{
     // Función que lee el presupuesto
     const definirPresupuesto = e => {
 
-        guardarCantidad( parseInt(e.target.value), 10);
+        guardarCantidad( parseInt(e.target.value,10));
     }
 
     // submit para definir el presupuesto
@@ -27,16 +30,21 @@ const Pregunta = () =>{
         // si pasa la validación
 
         guardarError(false);
+
+        guardarPresupuesto(cantidad);
+        guardarRestante(cantidad);
+        actualizarPregunta(false);
     }
 
     return (
        <Fragment>
 
-           <h2>Ingresa tu presupuesto</h2>
+           <h2>Ingresa tu presupuesto</h2>       
 
-           {error ? "El dato ingresado no es valido" : null}
+           { error ? <Error mensaje = "Hubo error en el presupuesto" /> : null }   
 
-           <from onSubmit = {agregarPresupuesto} >
+           <form onSubmit = {agregarPresupuesto} > 
+
                <input
                type = "number"
                placeholder = "Ingresa tu presupuesto"
@@ -47,12 +55,18 @@ const Pregunta = () =>{
                <input
                type = "submit"
                className = "button-primary u-full-width"
-               value = "Definir presu´puesto"
+               value = "Definir presupuesto"
                />
-           </from>
+           </form>
        </Fragment>
     );
 
+}
+
+Pregunta.propTypes = {
+    guardarPresupuesto: PropTypes.func.isRequired,
+    guardarRestante: PropTypes.func.isRequired,
+    actualizarPregunta: PropTypes.func.isRequired
 }
 
 export default Pregunta;
